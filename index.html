@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drawing App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header">
+        <div id="menu">
+          <button id="new" class="menubtn">New</button>
+          <button id="save" class="menubtn">Save</button>
+          <button id="open" class="menubtn">Open</button>
+        </div>
+        <div>
+          <p>
+            atoms and molecules
+          </p>
+        </div>
+        <div id="profile">
+          <p>
+            test_user
+          </p>
+        </div>
+    </div>
+      <br>
+      <br>
+      <br>
+      <br>
+<div id="root">
+  <div id="drawing-area">
+    <div id="canvas-area">
+      <canvas id="canvas" class="canvases"></canvas>
+    </div>
+  </div>
+  <div id="tool-area">
+    <button class="tool" id="pen">P</button>
+    <button class="tool" id="text">T</button>
+    <button class="tool" id="eraser">E</button>
+    <button class="tool" id="shapes">S</button>
+    <button class="tool" id="addcanvas">+</button>
+    
+    <div id="select_colour">
+      <div style="display: flex; flex-direction: row;">
+        <div onclick="change_colour(this)" class="colour-field" style="background-color: red;"></div>
+        <div onclick="change_colour(this)" class="colour-field" style="background-color: yellow;"></div>
+        <div onclick="change_colour(this)" class="colour-field" style="background-color: green;"></div>
+        <div onclick="change_colour(this)" class="colour-field" style="background-color: blue;"></div>
+        <div onclick="change_colour(this)" class="colour-field" style="background-color: white;"></div>
+        <input onchange="colour_change(this)" type="color" id="colour" value="#000000">
+      </div>
+      <div>
+        <input type="range" id="size" min="1" max="100" value="1">
+        <div id="rangeview" style="background-color: white; border-radius: 50%;"></div>
+      </div>
+    </div>
+
+    <div id="shape-select">
+      <button id="rectangle"  onclick="shape_select(this)" class="sapeselbtn">rect</button>
+      <button id="circle" onclick="shape_select(this)" class="sapeselbtn">circ</button>
+      <button id="line" onclick="shape_select(this)" class="sapeselbtn">line</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

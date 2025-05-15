@@ -1,0 +1,180 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+  
+#root {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+#drawing-area {
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: relative;
+    background-color: #222;
+    margin-top: 82px; /* Adjusted to account for the fixed header */
+}
+  
+#canvas-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    min-height: 100%;
+    cursor: crosshair;
+}
+  
+.canvases {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 150vh; /* Fixed height for each canvas */
+    background-color: #000;
+}
+  
+#tool-area {
+    margin-top: 82px;
+    display: flex;
+    flex-direction: column;
+    background-color: #444;
+    padding: 10px;
+    position: relative;
+}
+  
+.tool {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    background-color: #555;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+  
+.tool:hover {
+    background-color: #666;
+  }
+  
+#select_colour {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    right: 10px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#shape-select{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 250px;
+    right: 10px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+  
+.colour-field {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.colour-field:hover {
+    border: 2px solid #fff;
+}
+.sapeselbtn{
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.sapeselbtn:hover {
+    background-color: #666;
+}
+  
+#size, #colour {
+    margin: 10px;
+}
+
+
+/* #header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #444;
+    padding: 10px;
+    color: white;
+} */
+
+#menu {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+#header {
+    background-color: #444;
+    width: 100%;
+    height: 82px;
+    position: fixed;
+    z-index: 1000;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+}
+
+#profile{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    background-color: #555;
+    width: 200px;
+    height: 50px;
+    justify-content: right;
+    padding-right: 20px;
+    color: white;
+    border-radius: 25px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+#profile:hover {
+    background-color: #666;
+}
+
+.menubtn {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.menubtn:hover {
+    background-color: #666;
+}
