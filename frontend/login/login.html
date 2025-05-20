@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div id="maindiv">
+        <div id="logohead">
+            <img src="./assets/logo.png" alt="Logo" id="logo">
+        </div>
+        <div id="buttonsdiv">
+            <button class="btn" id="lgbtn">Login</button>
+            <button class="btn" id="snbtn">Sign Up</button>
+        </div>
+        <div id="space">
+            <div id="dftform" class="form active">
+                <h2 class="message">
+                    Welcome!
+                </h2>
+                <p class="message" style="font-size: 18px;">
+                    QuickNote is a note-making website
+                    that helps you make notes 
+                    <br>
+                    accessible on every
+                    device.
+                    <br>
+                    You can create and read notes from anywhere!
+                    <br>
+                </p>
+            </div>
+            <div id="lgform" class="form">
+                <input type="text" id="lgusername" class="forminput" placeholder="Username" required>
+                <input type="password" id="lgpassword" class="forminput" placeholder="Password" required>
+                <button class="btn form-button pulse" id="lgsubmit">Submit</button>
+            </div>
+            <div id="snform" class="form">
+                <input type="text" id="snusername" class="forminput" placeholder="Username" required>
+                <input type="email" id="snemail" class="forminput" placeholder="Email" required>
+                <input type="password" id="snpassword" class="forminput" placeholder="Password" required>
+                <button class="btn form-button pulse" id="snsubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js" defer>
+    </script>
+</body>
+</html>

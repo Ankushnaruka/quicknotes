@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Notes</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div id="navbar">
+    <div id="profile">
+      <img id="profileimg" src="assets/image.png" alt="Profile" />
+      <span id="user"></span>
+    </div>
+
+    <div id="logo">
+      <img src="./assets/logo.png" alt="Logo" id="logoimg" />
+    </div>
+
+    <div id="nav-buttons">
+      <button>Notes</button>
+      <button>Collection</button>
+      <button>Explore</button>
+    </div>
+  </div>
+
+  <div id="notnav">
+    <div id="sideview">
+        <div id="svheader">
+        </div>
+    </div>
+    <div id="drawarea">
+        <div id="daheader">
+            <button id="fullscreen"> ⛶</button>
+        </div>
+        <div id="drawcontent">
+          <div id="canvasarea">
+            
+          </div>
+          <div id="toolsarea">
+            <button class="toolbtn" id="pen">✏️</button>
+            <button class="toolbtn" id="Eraser">🧽</button>
+            <button class="toolbtn" id="Shapes">🔲</button>
+            <button class="toolbtn" id="Highlighter">🖍️</button>
+            <button class="toolbtn" id="addPage" title="Add New Canvas Page">📄</button>  
+          </div>
+          <div id="pensetter" class="toolsdiv">
+            <div id="colou-field">
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: red;"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: orange;"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: yellow;"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: green;"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: blue"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: violet"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: white;"></div>
+            </div>
+            <div id="colou-field2">
+              <input type="color" style="display: flex; height: 30px; width: 30px; border-radius: 10px;">
+              <input type="range" min="1" max="50" step="1" value="10" id="penwidth">
+              <div style="display: flex ; justify-content: center; align-items: center; width: 50px; height: 50px;">
+                <div id="penview"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="Highlightersetter" class="toolsdiv">
+            <div style="display: flex; justify-content: columns;">
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(255, 0, 0, 0.4);"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(255, 166, 0, 0.4);"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(255, 255, 0, 0.4);"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(0, 128, 0, 0.4);"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(0, 0, 255, 0.4)"></div>
+              <div onclick="changecolor(this)" class="colour-selection" style="background-color: rgba(238, 130, 238, 0.4)"></div>
+            <br>
+            <br>
+            
+            </div>
+              <input type="range" min="1" max="50" step="1" value="10" id="penwidth">
+        </div>
+    </div>
+  </div>
+
+  <script src="home.js" defer>
+    
+  </script>
+</body>
+</html>

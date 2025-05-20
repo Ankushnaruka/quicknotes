@@ -1,0 +1,191 @@
+body {
+            background-color: #0d0d0d;
+            background-image: url("./assets/background.png");
+            background-size: cover;
+            font-family: 'ISOCPEUR';
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #maindiv {
+            background-color: rgba(0, 0, 0, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 60px;
+            height: 500px;
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            overflow: hidden;
+        }
+
+        #logohead {
+            border-bottom: rgba(255, 255, 255, 0.5) solid 1px;
+            width: 100%;
+            height: 80px;
+            position: relative;
+        }
+
+        #logo {
+            height: 98%;
+            width: auto;
+            position: relative;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+
+        #buttonsdiv {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background-color: #000000;
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            width: 200px;
+            height: 50px;
+            font-size: 30px;
+            margin: 15px;
+            font-family: 'ISOCPEUR';
+            padding: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        } */
+
+        #space {
+            position: relative;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 90%;
+            height: 65%;
+            margin: 15px auto;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        #lgform {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        #snform {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        #dftform {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .active {
+            transform: translateX(0) !important;
+            opacity: 1 !important;
+        }
+
+        .inactive {
+            transform: translateX(-100%) !important;
+            opacity: 0 !important;
+        }
+
+        .message {
+            
+            font-family: 'ISOCPEUR';
+            font-size: 34px;
+            margin-bottom: 10px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .forminput {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            width: 80%;
+            height: 40px;
+            font-size: 26px;
+            margin: 10px;
+            font-family: 'ISOCPEUR';
+            padding: 5px 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .forminput:focus {
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .form-button {
+            margin-top: 15px;
+        }
+
+        /* @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        } */
+
+        /* .pulse {
+            animation: pulse 1.5s infinite;
+        } */

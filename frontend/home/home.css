@@ -1,0 +1,344 @@
+body {
+      background-color: #0d0d0d;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('./assets/background.png');
+      background-color: #0d0d0d;
+      font-size: 35px;
+    }
+
+    #navbar {
+      width: calc(100% - 22px);
+      height: 80px;
+      background-color: black;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 25px;
+      margin: 10px;
+      z-index: 100;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    #profile {
+      padding: 10px 20px;
+      background-color: black;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 25px;
+      font-size: 25px;
+      cursor: pointer;
+      font-family: 'ISOCPEUR';
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 220px;
+    }
+
+    #profile:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      color: #0d0d0d;
+    }
+
+    #profileimg {
+      height: 40px;
+      width: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      background-color: black;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    } 
+
+    #logo {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #logoimg {
+      height: 60px;
+      width: auto;
+    }
+
+    #nav-buttons button {
+      margin: 0 5px;
+      padding: 10px 20px;
+      background-color: black;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 25px;
+      font-size: 25px;
+      cursor: pointer;
+      font-family: 'ISOCPEUR';
+      transition: all 0.3s ease-in-out;
+    }
+
+    #nav-buttons button:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      color: #0d0d0d;
+      transform: translate(0, -5px);
+    }
+
+    #nav-buttons button:active {
+      transform: translate(0, 2px) scale(0.98);
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #notnav {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 120px);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #sideview {
+      width: 20%;
+      background-color: black;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 25px;
+      margin: 12px;
+      box-sizing: border-box;
+    }
+
+    #svheader {
+      position: relative;
+      height: 45px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    #drawarea {
+      width: 80%;
+      background-color: black;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 25px;
+      margin: 12px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    #daheader {
+      position: relative;
+      height: 45px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+    
+    #fullscreen {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background-color: black;
+      margin-right: 20px;
+      border-radius: 5px;
+      color: white;
+    }
+    
+    #fullscreen:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #drawcontent {
+      display: flex;
+      flex-direction: row;
+      height: calc(100% - 45px);
+      position: relative;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-bottom-left-radius: 25px; 
+      border-bottom-right-radius: 25px;
+    }
+
+
+    #toolsarea {
+      width: 50px;
+      height: 100%;
+      flex-shrink: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      background-color: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    
+    .toolbtn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background-color: black;
+      margin: 10px;
+      border-radius: 5px;
+      color: white;
+    }
+
+    .toolbtn:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      color: #000000;
+    }
+
+    #pensetter {
+      display: none;
+      position: absolute;
+      top: 30px;
+      right: 80px;
+      background-color: #000000;
+      border-radius: 20px;
+      height: 150px;
+      width: 300px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 20px;
+      flex-direction: column;
+      z-index: 10;
+    }
+    
+    .colour-selection {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .colour-selection:hover {
+      border: 2px solid white;
+      margin: 4px;
+    }
+
+    #colou-field {
+      height: 50%;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    
+    #colou-field2 {
+      height: 50%;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    #penview {
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background-color: #000000;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+.canvases{
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: crosshair;
+  margin: 10px;
+}
+
+#canvasarea {
+  flex: 1;
+  background-color: #0d0d0d;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  overflow-y: auto;   /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  padding: 20px;      /* 10px margin inside */
+  box-sizing: border-box;
+}
+
+#canvas {
+    display: block;
+    width: 100%;        /* Fill container width */
+    height: auto;       /* Maintain aspect ratio */
+    background: #000000;   /* Optional: white background for "page" look */
+}
+
+#Highlightersetter{
+  display: none;
+  position: absolute;
+  top: 200px;
+  right: 80px;
+  background-color: #000000;
+  border-radius: 20px;
+  height: 150px;
+  width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  flex-direction: column;
+  z-index: 10;
+}
+
+#shapesetter {
+display: none;
+position: absolute;
+top: 260px;
+right: 80px;
+background-color: #000000;
+border-radius: 20px;
+height: 150px;
+width: 300px;
+border: 1px solid rgba(255, 255, 255, 0.5);
+padding: 20px;
+flex-direction: column;
+z-index: 10;
+}
+.shape-btn {
+width: 80px;
+height: 40px;
+border: 1px solid rgba(255, 255, 255, 0.5);
+background-color: black;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.shape-btn:hover {
+background-color: rgba(255, 255, 255, 0.5);
+color: #000000;
+}
+/* Ensure canvases maintain correct position in both normal and fullscreen modes */
+#canvasarea {
+flex: 1;
+background-color: #0d0d0d;
+overflow-y: auto;
+overflow-x: hidden;
+position: relative;
+padding: 20px;
+box-sizing: border-box;
+}
+.canvases {
+display: block;
+background: #000000;
+margin: 0 auto;
+cursor: crosshair;
+}
+/* Fix for the full screen transition */
+#drawarea.fullscreen {
+width: 100% !important;
+height: 100vh !important;
+margin: 0 !important;
+border-radius: 0 !important;
+transition: all 0.3s ease;
+}
+/* Add page button hover effect */
+#addPage:hover {
+background-color: rgba(255, 255, 255, 0.5);
+color: #000000;
+}
