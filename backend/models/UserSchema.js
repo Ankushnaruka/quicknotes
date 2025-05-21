@@ -13,11 +13,11 @@ const userSchema = new mongoose.Schema({
   },
   password:{
     type: String,
-    require:true,
+    required:true,
   },
   folder:{
     type: Array,
-    require:true,
+    required:true,
   }
 });
 
