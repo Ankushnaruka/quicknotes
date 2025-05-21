@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+    let noteCanvasMap = {}; // key: noteId, value: array of canvases
+    let currentNoteId = null;
+    let currentPageIndex = 0;
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('username');
-    const DEFAULT_CANVAS_WIDTH = 900;  // or any fixed width you want
-const DEFAULT_CANVAS_HEIGHT = 1500;
+    const DEFAULT_CANVAS_WIDTH = 900;
+    const DEFAULT_CANVAS_HEIGHT = 1500;
 
     const userSpan = document.getElementById("user");
     if (userSpan && username) {
@@ -19,8 +22,6 @@ const DEFAULT_CANVAS_HEIGHT = 1500;
     // No default canvas on load
     let canvas = null;
     let ctx = null;
-    let canvasData;
-    let canvasarray = [];
 
     // Drawing state variables
     let penwidth = document.getElementById("penwidth");
@@ -99,35 +100,35 @@ const DEFAULT_CANVAS_HEIGHT = 1500;
 
     // --- FULLSCREEN HANDLER ---
     fullscreenBtn.addEventListener("click", () => {
-    if (!canvas) return;
-    isFullscreen = !isFullscreen;
+        if (!canvas) return;
+        isFullscreen = !isFullscreen;
 
-    if (isFullscreen) {
-        navbar.style.display = "none";
-        sideview.style.display = "none";
-        drawarea.style.width = "100%";
-        drawarea.style.margin = "0";
-        drawarea.style.borderRadius = "0";
-        drawarea.style.height = "100vh";
-        notnav.style.height = "100vh";
-        drawarea.requestFullscreen().catch(err => {
-            console.error("Fullscreen error:", err);
-        });
-        fullscreenBtn.innerText = "🗗";
-    } else {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
+        if (isFullscreen) {
+            navbar.style.display = "none";
+            sideview.style.display = "none";
+            drawarea.style.width = "100%";
+            drawarea.style.margin = "0";
+            drawarea.style.borderRadius = "0";
+            drawarea.style.height = "100vh";
+            notnav.style.height = "100vh";
+            drawarea.requestFullscreen().catch(err => {
+                console.error("Fullscreen error:", err);
+            });
+            fullscreenBtn.innerText = "🗗";
+        } else {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+            navbar.style.display = "flex";
+            sideview.style.display = "block";
+            drawarea.style.width = "80%";
+            drawarea.style.margin = "12px";
+            drawarea.style.borderRadius = "25px";
+            drawarea.style.height = "";
+            notnav.style.height = "calc(100vh - 120px)";
+            fullscreenBtn.innerText = "⛶";
         }
-        navbar.style.display = "flex";
-        sideview.style.display = "block";
-        drawarea.style.width = "80%";
-        drawarea.style.margin = "12px";
-        drawarea.style.borderRadius = "25px";
-        drawarea.style.height = "";
-        notnav.style.height = "calc(100vh - 120px)";
-        fullscreenBtn.innerText = "⛶";
-    }
-});
+    });
 
     // --- CANVAS SELECTION HANDLER ---
     canvasarea.addEventListener("click", function(e) {
@@ -295,18 +296,20 @@ const DEFAULT_CANVAS_HEIGHT = 1500;
 
     // --- ADD PAGE FUNCTIONALITY ---
     document.getElementById("addPage").addEventListener("click", () => {
+    if (!currentNoteId) return; // No note selected
+
+    // Create a new canvas for the new page
     const newCanvas = document.createElement("canvas");
     newCanvas.className = "canvases";
     newCanvas.width = DEFAULT_CANVAS_WIDTH;
     newCanvas.height = DEFAULT_CANVAS_HEIGHT;
-    canvasarea.appendChild(newCanvas);
     addDrawingListeners(newCanvas);
-    canvasarray.push(newCanvas);
-    document.querySelectorAll(".canvases").forEach(c => c.style.border = "");
-    newCanvas.style.border = "2px solid yellow";
-    canvas = newCanvas;
-    ctx = canvas.getContext("2d");
-    ctx.fillStyle = "black";
+
+    // Add to the current note's canvas array
+    noteCanvasMap[currentNoteId].push(newCanvas);
+
+    // Refresh the view to show all canvases for this note
+    noteclicked(document.querySelector(`[data-note-id="${currentNoteId}"]`));
     newCanvas.scrollIntoView({ behavior: "smooth" });
 });
 
@@ -357,16 +360,187 @@ const DEFAULT_CANVAS_HEIGHT = 1500;
 
     // --- WINDOW RESIZE HANDLER ---
     window.addEventListener("resize", () => {
-        if (!canvas) return;
-        if (!isFullscreen) {
-            const tempData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.width = canvasarea.clientWidth - 40;
-            ctx.putImageData(tempData, 0, 0);
-        } else {
-            const tempData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.width = drawarea.clientWidth - 20;
-            canvas.height = drawarea.clientHeight - 20;
-            ctx.putImageData(tempData, 0, 0);
+        // No canvas resizing to keep all canvases the same size
+    });
+
+    document.getElementById("addnote").addEventListener("click",()=>{
+        if(document.getElementById("addnotewindow").style.display === "flex"){
+            document.getElementById("addnotewindow").style.display = "none"
+        }
+        else{
+            document.getElementById("addnotewindow").style.display = "flex"
         }
     });
+
+    document.getElementById("submitnotetitle").addEventListener("click", () => {
+        let notetitle = document.getElementById("notetitle").value.trim();
+        if (!notetitle) return;
+        document.getElementById("notetitle").value = "";
+
+        // Create note div
+        const noteDiv = document.createElement("div");
+        noteDiv.className = "notes";
+        noteDiv.innerText = notetitle;
+
+        // Give each note a unique id (could use timestamp or increment)
+        const noteId = "note_" + Date.now();
+        noteDiv.dataset.noteId = noteId;
+
+        // Create first canvas for this note
+        const noteCanvas = document.createElement("canvas");
+        noteCanvas.className = "canvases";
+        noteCanvas.width = DEFAULT_CANVAS_WIDTH;
+        noteCanvas.height = DEFAULT_CANVAS_HEIGHT;
+        addDrawingListeners(noteCanvas);
+
+        // Store as array
+        noteCanvasMap[noteId] = [noteCanvas];
+
+        // Note click logic
+        noteDiv.onclick = function() {
+            noteclicked(this);
+        };
+
+        document.getElementById("notearea").appendChild(noteDiv);
+
+        // Auto-select the new note
+        noteclicked(noteDiv);
+    });
+
+    function noteclicked(element) {
+    // Highlight selected note
+    let notes = document.getElementsByClassName("notes");
+    for (let i = 0; i < notes.length; i++) {
+        notes[i].style.backgroundColor = "black";
+        notes[i].style.color = "white";
+    }
+    element.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+    element.style.color = "black";
+    document.getElementById("notename").innerText = element.innerText;
+
+    // Remove all canvases from canvasarea
+    while (canvasarea.firstChild) {
+        canvasarea.removeChild(canvasarea.firstChild);
+    }
+
+    // Show all canvases for the selected note
+    const noteId = element.dataset.noteId;
+    currentNoteId = noteId;
+    currentPageIndex = 0;
+    const canvases = noteCanvasMap[noteId];
+    canvases.forEach((c, idx) => {
+        canvasarea.appendChild(c);
+        addDrawingListeners(c); // Ensure listeners are attached
+    });
+
+    // Set canvas/ctx to the first page for tool logic
+    canvas = canvases[0];
+    ctx = canvas.getContext("2d");
+}
+document.getElementById("save").addEventListener("click", async () => {
+    document.getElementById("save").innerText = "Saving...";
+    
+    // Get the note titles from the DOM
+    const noteTitles = {};
+    const noteElements = document.getElementsByClassName("notes");
+    for (let i = 0; i < noteElements.length; i++) {
+        const noteId = noteElements[i].dataset.noteId;
+        noteTitles[noteId] = noteElements[i].innerText;
+    }
+    
+    // Structure the data correctly for the backend
+    const notesToSave = [];
+    for (const [noteId, canvases] of Object.entries(noteCanvasMap)) {
+        notesToSave.push({
+            id: noteId,
+            title: noteTitles[noteId],
+            pages: canvases.map(canvas => canvas.toDataURL())
+        });
+    }
+    
+    try {
+        // Use window.location.origin to get the current origin
+        const origin = window.location.origin; // This will be either http://localhost:3000 or http://127.0.0.1:3000
+        const response = await fetch(`${origin}/updatefolder`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                notes: notesToSave, 
+                username: username 
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data.success) {
+            alert("Notes saved successfully!");
+        } else {
+            alert(`Failed to save notes: ${data.error || 'Unknown error'}`);
+        }
+    } catch (error) {   
+        console.error("Error saving notes:", error);
+        alert(`Error saving notes: ${error.message}`);
+    }
+    
+    document.getElementById("save").innerText = "Save";
+});
+async function loadUserNotes() {
+    try {
+        const origin = window.location.origin;
+        const response = await fetch(`${origin}/getfolder?username=${encodeURIComponent(username)}`);
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        const data = await response.json();
+        // data.notes should be an array of { id, title, pages }
+        if (!data.notes) return;
+
+        console.log("Rendering notes:", data.notes);
+        data.notes.forEach(note => {
+            console.log("Rendering note:", note.title, note.pages.length, "pages");
+            // Create note div
+            const noteDiv = document.createElement("div");
+            noteDiv.className = "notes";
+            noteDiv.innerText = note.title;
+            noteDiv.dataset.noteId = note.id;
+
+            // Restore canvases for this note
+            const canvases = [];
+            note.pages.forEach(pageDataUrl => {
+                const canvas = document.createElement("canvas");
+                canvas.className = "canvases";
+                canvas.width = DEFAULT_CANVAS_WIDTH;
+                canvas.height = DEFAULT_CANVAS_HEIGHT;
+                addDrawingListeners(canvas);
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                img.onload = () => ctx.drawImage(img, 0, 0);
+                img.src = pageDataUrl;
+                canvases.push(canvas);
+            });
+            noteCanvasMap[note.id] = canvases;
+
+            // Note click logic
+            noteDiv.onclick = function() {
+                noteclicked(this);
+            };
+
+            document.getElementById("notearea").appendChild(noteDiv);
+        });
+
+        // Auto-select the first note if any
+        const firstNoteDiv = document.querySelector("#notearea .notes");
+        if (firstNoteDiv) noteclicked(firstNoteDiv);
+
+    } catch (error) {
+        console.error("Error loading notes:", error);
+        alert(`Error loading notes: ${error.message}`);
+    }
+}
+loadUserNotes();
 });
