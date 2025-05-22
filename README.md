@@ -168,4 +168,8 @@ MIT License
 
 ---
 
+<<<<<<< HEAD
 **QuickNotes** – Your digital notebook for handwritten, multi-page notes!
+=======
+**QuickNotes** – Your digital notebook for handwritten, multi-page notes!
+>>>>>>> e7f0fed3b57dd3293b3e85c571fe972b1dc4df91
