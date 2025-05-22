@@ -380,11 +380,25 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create note div
         const noteDiv = document.createElement("div");
         noteDiv.className = "notes";
-        noteDiv.innerText = notetitle;
+        
+        // Create title span for clean text separation
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "note-title";
+        titleSpan.innerText = notetitle;
+        noteDiv.appendChild(titleSpan);
+        
+        noteDiv.dataset.title = notetitle;
 
         // Give each note a unique id (could use timestamp or increment)
         const noteId = "note_" + Date.now();
         noteDiv.dataset.noteId = noteId;
+
+        // Create and append the delete button
+        let notedelbtn = document.createElement("button");
+        notedelbtn.className = "notedelbtn";
+        notedelbtn.innerText = "🗑️";
+        notedelbtn.onclick = deleteNote;
+        noteDiv.appendChild(notedelbtn);
 
         // Create first canvas for this note
         const noteCanvas = document.createElement("canvas");
@@ -397,7 +411,9 @@ document.addEventListener("DOMContentLoaded", function () {
         noteCanvasMap[noteId] = [noteCanvas];
 
         // Note click logic
-        noteDiv.onclick = function() {
+        noteDiv.onclick = function(e) {
+            // Prevent note selection if the delete button was clicked
+            if (e.target.classList.contains("notedelbtn")) return;
             noteclicked(this);
         };
 
@@ -408,35 +424,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function noteclicked(element) {
-    // Highlight selected note
-    let notes = document.getElementsByClassName("notes");
-    for (let i = 0; i < notes.length; i++) {
-        notes[i].style.backgroundColor = "black";
-        notes[i].style.color = "white";
+        // Highlight selected note
+        let notes = document.getElementsByClassName("notes");
+        for (let i = 0; i < notes.length; i++) {
+            notes[i].style.backgroundColor = "black";
+            notes[i].style.color = "white";
+        }
+        element.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+        element.style.color = "black";
+        
+        // Use the title from dataset or find the title span
+        const titleSpan = element.querySelector('.note-title');
+        const noteTitle = titleSpan ? titleSpan.innerText : element.dataset.title;
+        document.getElementById("notename").innerText = noteTitle || "Untitled";
+
+        // Remove all canvases from canvasarea
+        while (canvasarea.firstChild) {
+            canvasarea.removeChild(canvasarea.firstChild);
+        }
+
+        // Show all canvases for the selected note
+        const noteId = element.dataset.noteId;
+        currentNoteId = noteId;
+        currentPageIndex = 0;
+        const canvases = noteCanvasMap[noteId];
+        canvases.forEach((c, idx) => {
+            canvasarea.appendChild(c);
+            addDrawingListeners(c); // Ensure listeners are attached
+        });
+
+        // Set canvas/ctx to the first page for tool logic
+        canvas = canvases[0];
+        ctx = canvas.getContext("2d");
     }
-    element.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
-    element.style.color = "black";
-    document.getElementById("notename").innerText = element.innerText;
 
-    // Remove all canvases from canvasarea
-    while (canvasarea.firstChild) {
-        canvasarea.removeChild(canvasarea.firstChild);
-    }
-
-    // Show all canvases for the selected note
-    const noteId = element.dataset.noteId;
-    currentNoteId = noteId;
-    currentPageIndex = 0;
-    const canvases = noteCanvasMap[noteId];
-    canvases.forEach((c, idx) => {
-        canvasarea.appendChild(c);
-        addDrawingListeners(c); // Ensure listeners are attached
-    });
-
-    // Set canvas/ctx to the first page for tool logic
-    canvas = canvases[0];
-    ctx = canvas.getContext("2d");
-}
 document.getElementById("save").addEventListener("click", async () => {
     document.getElementById("save").innerText = "Saving...";
     
@@ -445,7 +466,8 @@ document.getElementById("save").addEventListener("click", async () => {
     const noteElements = document.getElementsByClassName("notes");
     for (let i = 0; i < noteElements.length; i++) {
         const noteId = noteElements[i].dataset.noteId;
-        noteTitles[noteId] = noteElements[i].innerText;
+        const titleSpan = noteElements[i].querySelector('.note-title');
+        noteTitles[noteId] = titleSpan ? titleSpan.innerText : noteElements[i].dataset.title;
     }
     
     // Structure the data correctly for the backend
@@ -489,6 +511,16 @@ document.getElementById("save").addEventListener("click", async () => {
     
     document.getElementById("save").innerText = "Save";
 });
+
+function deleteNote() {
+    const noteDiv = this.parentElement;
+    const noteId = noteDiv.dataset.noteId;
+    // Remove from DOM
+    noteDiv.style.display = "none";
+    // Remove from noteCanvasMap
+    delete noteCanvasMap[noteId];
+}
+
 async function loadUserNotes() {
     try {
         const origin = window.location.origin;
@@ -506,8 +538,22 @@ async function loadUserNotes() {
             // Create note div
             const noteDiv = document.createElement("div");
             noteDiv.className = "notes";
-            noteDiv.innerText = note.title;
+            
+            // Create title span for clean text separation
+            const titleSpan = document.createElement("span");
+            titleSpan.className = "note-title";
+            titleSpan.innerText = note.title;
+            noteDiv.appendChild(titleSpan);
+            
+            noteDiv.dataset.title = note.title;
             noteDiv.dataset.noteId = note.id;
+
+            // Create and append the delete button
+            let notedelbtn= document.createElement("button");
+            notedelbtn.className = "notedelbtn";
+            notedelbtn.innerText = "🗑️";
+            notedelbtn.onclick = deleteNote;
+            noteDiv.appendChild(notedelbtn);
 
             // Restore canvases for this note
             const canvases = [];
@@ -526,7 +572,9 @@ async function loadUserNotes() {
             noteCanvasMap[note.id] = canvases;
 
             // Note click logic
-            noteDiv.onclick = function() {
+            noteDiv.onclick = function(e) {
+                // Prevent note selection if the delete button was clicked
+                if (e.target.classList.contains("notedelbtn")) return;
                 noteclicked(this);
             };
 

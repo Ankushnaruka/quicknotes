@@ -420,6 +420,7 @@ color: #000000;
   display: flex;
   align-items: center;
   transition: background 0.2s, border 0.2s;
+  justify-content: space-between;
 }
 
 .notes:hover {
@@ -431,6 +432,20 @@ color: #000000;
   background-color: #1a1a1a;
   border: 1px solid #fff;
   color: #ffe066;
+}
+
+.notedelbtn{
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: black;
+  margin-left: auto;
+  border-radius: 5px;
+  color: white;
+}
+.notedelbtn:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000000;
 }
 
 #submitnotetitle{

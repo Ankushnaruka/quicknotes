@@ -1,4 +1,3 @@
-````markdown
 # QuickNotes
 
 QuickNotes is a full-stack web application for creating, organizing, and drawing on digital notes with multiple pages per note. It supports user authentication, persistent storage, and a rich drawing interface with pen, eraser, highlighter, and shape tools.
@@ -170,4 +169,3 @@ MIT License
 ---
 
 **QuickNotes** – Your digital notebook for handwritten, multi-page notes!
-````
