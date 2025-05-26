@@ -4,7 +4,8 @@ const User = require('./models/UserSchema');
 const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = '*jb*c8T(*R39vv48305#@82vbV111&^WLMWfu#!^!$(^QJCcdw7#@^';
+require('dotenv').config();
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const app = express();
 app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads (canvas images)
@@ -26,7 +27,7 @@ function authenticateToken(req, res, next) {
 }
 
 // MongoDB URI
-const mongoURI = 'mongodb+srv://ankushnaruka3:ankush123@cluster0.7hv9nfa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/quicknotes';
+const mongoURI = process.env.MDB_URI;
 
 mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB connected'))
