@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const User = require('./models/UserSchema');
 const cors = require('cors');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = '*jb*c8T(*R39vv48305#@82vbV111&^WLMWfu#!^!$(^QJCcdw7#@^';
 
 const app = express();
 app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads (canvas images)
@@ -10,8 +12,21 @@ app.use(cors({
   origin: ['http://127.0.0.1:3000', 'http://localhost:3000']
 }));
 
+// JWT authentication middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next(); // Pass the user object to the next middleware
+  });
+}
+
 // MongoDB URI
-const mongoURI = '';
+const mongoURI = 'mongodb+srv://ankushnaruka3:ankush123@cluster0.7hv9nfa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/quicknotes';
 
 mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB connected'))
@@ -37,25 +52,31 @@ app.post('/users', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    try {
-        const user = await User.findOne({ username: req.body.username });
-        if (user) {
-            res.status(200).send({ message: "success", user });
-        } else {
-            res.status(401).send({ error: "User not found. Please sign up first." });
-        }
-    } catch (err) {
-        res.status(400).send({ error: err.message });
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    if (user) {
+      if (user.password !== req.body.password) {
+        return res.status(401).send({ error: "Invalid password" });
+      }
+      const token = jwt.sign({ username: user.username, id: user._id }, SECRET_KEY, { expiresIn: '1h' });
+      res.json({ message: "success", token });
+    } else {
+      res.status(401).send({ error: "User not found. Please sign up first." });
     }
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
 });
 
 app.get('/home', async(req,res) => {
   res.sendFile(path.join(__dirname, '../frontend/home/home.html'));
 });
 
-app.post('/updatefolder', async (req, res) => {
+// PROTECTED: Save notes
+app.post('/updatefolder', authenticateToken, async (req, res) => {
   try {
-    const { notes, username } = req.body; // Changed from folder to notes to match frontend
+    const { notes } = req.body;
+    const username = req.user.username; // Get from JWT
     console.log(`Received update request for user: ${username}`);
     
     const user = await User.findOne({ username: username });
@@ -73,9 +94,10 @@ app.post('/updatefolder', async (req, res) => {
   }
 });
 
-app.get('/getfolder', async (req, res) => {
+// PROTECTED: Get notes
+app.get('/getfolder', authenticateToken, async (req, res) => {
   try {
-    const username = req.query.username;
+    const username = req.user.username; // Get from JWT
     const user = await User.findOne({ username: username });
     console.log("GETFOLDER username:", username, "user:", user);
     if (user && user.folder) {

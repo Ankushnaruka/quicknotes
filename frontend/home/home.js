@@ -2,11 +2,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let noteCanvasMap = {}; // key: noteId, value: array of canvases
     let currentNoteId = null;
     let currentPageIndex = 0;
+    const token = localStorage.getItem('token');
     const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('username');
     const DEFAULT_CANVAS_WIDTH = 900;
     const DEFAULT_CANVAS_HEIGHT = 1500;
 
+    function getUsernameFromToken(token) {
+        if (!token) return null;
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            // atob decodes base64 to a string 
+            return payload.username || null;
+        } catch (e) {
+            console.error("Invalid token format:", e);
+            return null;
+        }
+    }
+    const username = getUsernameFromToken(token);
     const userSpan = document.getElementById("user");
     if (userSpan && username) {
         userSpan.innerText = username;
@@ -458,9 +470,10 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx = canvas.getContext("2d");
     }
 
+// --- Save Notes ---
 document.getElementById("save").addEventListener("click", async () => {
     document.getElementById("save").innerText = "Saving...";
-    
+
     // Get the note titles from the DOM
     const noteTitles = {};
     const noteElements = document.getElementsByClassName("notes");
@@ -481,23 +494,22 @@ document.getElementById("save").addEventListener("click", async () => {
     }
     
     try {
-        // Use window.location.origin to get the current origin
-        const origin = window.location.origin; // This will be either http://localhost:3000 or http://127.0.0.1:3000
+        const origin = window.location.origin;
         const response = await fetch(`${origin}/updatefolder`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify({ 
-                notes: notesToSave, 
-                username: username 
+                notes: notesToSave
             })
         });
-        
+
         if (!response.ok) {
             throw new Error(`Server responded with status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         if (data.success) {
             alert("Notes saved successfully!");
@@ -508,7 +520,7 @@ document.getElementById("save").addEventListener("click", async () => {
         console.error("Error saving notes:", error);
         alert(`Error saving notes: ${error.message}`);
     }
-    
+
     document.getElementById("save").innerText = "Save";
 });
 
@@ -521,10 +533,17 @@ function deleteNote() {
     delete noteCanvasMap[noteId];
 }
 
+// --- Load Notes ---
 async function loadUserNotes() {
     try {
+        console.log("JWT token:", token);
         const origin = window.location.origin;
-        const response = await fetch(`${origin}/getfolder?username=${encodeURIComponent(username)}`);
+        const response = await fetch(`${origin}/getfolder`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
         if (!response.ok) {
             throw new Error(`Server responded with status: ${response.status}`);
         }

@@ -65,40 +65,43 @@ document.addEventListener("DOMContentLoaded", function() {
             
             // Form submission handlers
     document.getElementById("lgsubmit").addEventListener("click", async function(e) {
-    e.preventDefault();
-    const username = document.getElementById("lgusername").value;
-    const password = document.getElementById("lgpassword").value;
+        e.preventDefault();
+        const username = document.getElementById("lgusername").value;
+        const password = document.getElementById("lgpassword").value;
 
-    if (!username || !password) {
-        alert("Please fill all fields");
-        return;
-    }
-
-    // Send login data to server
-    try {
-        let response = await fetch("http://localhost:3000/login", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        });
-
-        let data = await response.json();
-
-        
-        if (response.ok && data.message === "success") {
-            window.location.href = `http://localhost:3000/home?username=${encodeURIComponent(username)}`;
-        } else {
-            alert(data.error || "Login failed");
+        if (!username || !password) {
+            alert("Please fill all fields");
+            return;
         }
 
-    } catch (error) {
-        alert("Network error: " + error.message);
-    }
+        // Send login data to server
+        try {
+            let response = await fetch("http://localhost:3000/login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            let data = await response.json();
+
+            if (response.ok && data.message === "success") {
+                // Store JWT token in localStorage
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.token)
+                // Redirect to home, passing username in query (optional)
+                window.location.href = `http://localhost:3000/home`;
+            } else {
+                alert(data.error || "Login failed");
+            }
+
+        } catch (error) {
+            alert("Network error: " + error.message);
+        }
 });
             document.getElementById("snsubmit").addEventListener("click", function(e) {
                 e.preventDefault();
