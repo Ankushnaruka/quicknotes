@@ -4,7 +4,7 @@ const User = require('./models/UserSchema');
 const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const app = express();
