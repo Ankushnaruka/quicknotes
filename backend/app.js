@@ -10,7 +10,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 const app = express();
 app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads (canvas images)
 app.use(cors({
-  origin: ['http://127.0.0.1:3000', 'http://localhost:3000']
+  origin: ['http://127.0.0.1:3000', 'http://localhost:3000','https://quicknotess.vercel.app/']
 }));
 
 // JWT authentication middleware
