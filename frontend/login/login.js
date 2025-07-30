@@ -1,11 +1,14 @@
 //const { fetch } = require("undici-types");
 
 document.addEventListener("DOMContentLoaded", function() {
-            const loginButton = document.getElementById("lgbtn");
-            const signinButton = document.getElementById("snbtn");
-            const defaultForm = document.getElementById("dftform");
-            const loginForm = document.getElementById("lgform");
-            const signinForm = document.getElementById("snform");
+    // Get BASE_URL from window.ENV injected by a script tag, fallback to localhost
+    const BASE_URL = (window.ENV && window.ENV.BASE_URL) ? window.ENV.BASE_URL : "http://localhost:3000";
+
+    const loginButton = document.getElementById("lgbtn");
+    const signinButton = document.getElementById("snbtn");
+    const defaultForm = document.getElementById("dftform");
+    const loginForm = document.getElementById("lgform");
+    const signinForm = document.getElementById("snform");
             
             // Button hover sound effect (uncomment if you have the sound file)
             // const buttons = document.querySelectorAll(".btn");
@@ -76,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Send login data to server
         try {
-            let response = await fetch("http://localhost:3000/login", {
+            let response = await fetch(`${BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -92,9 +95,8 @@ document.addEventListener("DOMContentLoaded", function() {
             if (response.ok && data.message === "success") {
                 // Store JWT token in localStorage
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('token', data.token)
                 // Redirect to home, passing username in query (optional)
-                window.location.href = `http://localhost:3000/home`;
+                window.location.href = `${BASE_URL}/home`;
             } else {
                 alert(data.error || "Login failed");
             }
@@ -102,49 +104,49 @@ document.addEventListener("DOMContentLoaded", function() {
         } catch (error) {
             alert("Network error: " + error.message);
         }
-});
-            document.getElementById("snsubmit").addEventListener("click", function(e) {
-                e.preventDefault();
-                const username = document.getElementById("snusername").value;
-                const email = document.getElementById("snemail").value;
-                const password = document.getElementById("snpassword").value;
-                
-                if (!username || !email || !password) {
-                    alert("Please fill all fields");
-                    return;
-                }
-                
-                // Here you would typically send the signup data to your server
-                console.log("Signup attempt:", { username, email, password });
-                
-                //database posrequest
-fetch('http://localhost:3000/users', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-        folder: []
-    })
+    });
+    document.getElementById("snsubmit").addEventListener("click", function(e) {
+        e.preventDefault();
+        const username = document.getElementById("snusername").value;
+        const email = document.getElementById("snemail").value;
+        const password = document.getElementById("snpassword").value;
+        
+        if (!username || !email || !password) {
+            alert("Please fill all fields");
+            return;
+        }
+        
+        // Here you would typically send the signup data to your server
+        console.log("Signup attempt:", { username, email, password });
+        
+        //database posrequest
+        fetch(`${BASE_URL}/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                folder: []
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert("Signup failed: " + data.error);
-                } else {
-                    document.getElementById("snusername").value="";
-                    document.getElementById("snemail").value="";
-                    document.getElementById("snpassword").value="";
-                    alert("Signup successful! you may now login");
-                }
-            })
-            .catch(error => {
-                alert("Network error: " + error.message);
-            });
-            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Signup failed: " + data.error);
+            } else {
+                document.getElementById("snusername").value="";
+                document.getElementById("snemail").value="";
+                document.getElementById("snpassword").value="";
+                alert("Signup successful! you may now login");
+            }
+        })
+        .catch(error => {
+            alert("Network error: " + error.message);
+        });
+    });
             
             // Add input field animations
             const inputs = document.querySelectorAll(".forminput");

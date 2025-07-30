@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=login/login.html">
+    <script>
+          window.ENV = {
+            BASE_URL: "http://localhost:3000" // Replace this with your actual env value or inject dynamically during build
+        };
+        // Fallback for browsers that ignore meta refresh
+        window.location.href = "login/login.html";
+    </script>
+</head>
+<body>
+    <p>Redirecting to <a href="login/login.html">login page</a>...</p>
+</body>
+</html>
