@@ -10,8 +10,12 @@ const SECRET_KEY = process.env.JWT_SECRET;
 const app = express();
 app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads (canvas images)
 app.use(cors({
-  origin: ['http://127.0.0.1:3000', 'http://localhost:3000','https://quicknotess.vercel.app/']
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+const API = process.env.API || 'http://localhost:3000';
 
 // JWT authentication middleware
 function authenticateToken(req, res, next) {
@@ -38,11 +42,11 @@ app.use(express.static(path.join(__dirname, '../frontend/login')));
 app.use(express.static(path.join(__dirname,'../frontend/home')));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.get('/', (req, res) => {
+app.get(API + '/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/login/login.html'));
 });
 
-app.post('/users', async (req, res) => {
+app.post(API + '/users', async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
@@ -52,7 +56,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post(API + '/login', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (user) {
@@ -69,12 +73,12 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.get('/home', async(req,res) => {
+app.get(API + '/home', async(req,res) => {
   res.sendFile(path.join(__dirname, '../frontend/home/home.html'));
 });
 
 // PROTECTED: Save notes
-app.post('/updatefolder', authenticateToken, async (req, res) => {
+app.post(API + '/updatefolder', authenticateToken, async (req, res) => {
   try {
     const { notes } = req.body;
     const username = req.user.username; // Get from JWT
@@ -96,7 +100,7 @@ app.post('/updatefolder', authenticateToken, async (req, res) => {
 });
 
 // PROTECTED: Get notes
-app.get('/getfolder', authenticateToken, async (req, res) => {
+app.get(API + '/getfolder', authenticateToken, async (req, res) => {
   try {
     const username = req.user.username; // Get from JWT
     const user = await User.findOne({ username: username });
