@@ -15,8 +15,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const API = process.env.API || 'http://localhost:3000';
-
 // JWT authentication middleware
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -42,11 +40,11 @@ app.use(express.static(path.join(__dirname, '../frontend/login')));
 app.use(express.static(path.join(__dirname,'../frontend/home')));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.get('https://quicknotes-pno8.onrender.com/' , (req, res) => {
+app.get('/' , (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/login/login.html'));
 });
 
-app.post('https://quicknotes-pno8.onrender.com/users', async (req, res) => {
+app.post('/users', async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
@@ -56,7 +54,7 @@ app.post('https://quicknotes-pno8.onrender.com/users', async (req, res) => {
   }
 });
 
-app.post('https://quicknotes-pno8.onrender.com/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (user) {
@@ -73,12 +71,13 @@ app.post('https://quicknotes-pno8.onrender.com/login', async (req, res) => {
   }
 });
 
-app.get('https://quicknotes-pno8.onrender.com/home', async(req,res) => {
+app.get('/home', async(req,res) => {
   res.sendFile(path.join(__dirname, '../frontend/home/home.html'));
+  console.log("Home route accessed: ", __dirname);
 });
 
 // PROTECTED: Save notes
-app.post('https://quicknotes-pno8.onrender.com/updatefolder', authenticateToken, async (req, res) => {
+app.post('/updatefolder', authenticateToken, async (req, res) => {
   try {
     const { notes } = req.body;
     const username = req.user.username; // Get from JWT
@@ -100,7 +99,7 @@ app.post('https://quicknotes-pno8.onrender.com/updatefolder', authenticateToken,
 });
 
 // PROTECTED: Get notes
-app.get('https://quicknotes-pno8.onrender.com/getfolder', authenticateToken, async (req, res) => {
+app.get('/getfolder', authenticateToken, async (req, res) => {
   try {
     const username = req.user.username; // Get from JWT
     const user = await User.findOne({ username: username });
