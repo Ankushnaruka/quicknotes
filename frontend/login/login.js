@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function() {
     // Get BASE_URL from window.ENV injected by a script tag, fallback to localhost
-    const BASE_URL = (window.ENV && window.ENV.BASE_URL) ? window.ENV.BASE_URL : "http://localhost:3000";
+    const BASE_URL = "https://quicknotes-pno8.onrender.com"
 
     const loginButton = document.getElementById("lgbtn");
     const signinButton = document.getElementById("snbtn");
