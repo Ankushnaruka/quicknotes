@@ -1,6 +1,6 @@
 body {
             background-color: #0d0d0d;
-            background-image: url("./assets/background.png");
+            background: url("./assets/background.png");
             background-size: cover;
             font-family: 'ISOCPEUR';
             color: #FFFFFF;
